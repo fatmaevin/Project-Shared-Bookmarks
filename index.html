@@ -1,8 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <script type="module" src="script.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shared Bookmarks</title>
   </head>
   <body>
+    <label for="dropdown">Select user:</label>
+    <select id="dropdown">
+      <option value="">Select a user</option>
+    </select>
+    <br />
+    <form id="bookmarkForm">
+      <label for="url" >Your url:</label>
+      <input id="url" required /><br /><br />
+      <label for="title">Title:</label>
+      <input id="title" required /><br /><br />
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" required></textarea>
+      <div>
+        <button type="submit" id="submit">Submit</button>
+      </div>
+    </form>
+    <br />
+
+    <div id="bookmarkList"></div>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
