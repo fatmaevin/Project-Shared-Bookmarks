@@ -6,7 +6,21 @@
 
 import { getUserIds } from "./storage.js";
 
-window.onload = function () {
-  const users = getUserIds();
-  document.querySelector("body").innerText = `There are ${users.length} users`;
-};
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("bookmarkForm");
+  const button = document.getElementById("submit");
+  const users = document.getElementById("dropdown");
+  const url = document.getElementById("url");
+  const description = document.getElementById("description");
+
+  const userId = getUserIds();
+  userId.forEach((id) => {
+    const option = document.createElement("option");
+    option.value = id;
+    option.textContent = `User ${id}`;
+    users.appendChild(option);
+  });
+  
+
+  
+});
