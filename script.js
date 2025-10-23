@@ -1,4 +1,9 @@
 import { getUserIds, getData, setData, clearData } from "./storage.js";
+import {
+  createBookmark,
+  addBookmark,
+  sortBookmarks,
+} from "./helper-functions.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("bookmarkForm");
@@ -15,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     clearData(selectedUser);
-    renderBookmarks();
+    renderBookmarks([]);
   });
 
   const userId = getUserIds();
@@ -28,33 +33,25 @@ document.addEventListener("DOMContentLoaded", () => {
   users.addEventListener("change", (event) => {
     const selectedUser = event.target.value;
     const selectedUserData = getData(selectedUser);
-
-    const sortedData = [...selectedUserData].sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-    );
-
+    const sortedData = sortBookmarks(selectedUserData);
     renderBookmarks(sortedData);
   });
-  
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const selectedUser = users.value;
-    const bookmark = {
-      url: url.value,
-      title: title.value,
-      description: description.value,
-      createdAt: new Date().toISOString(),
-    };
-    const usersData = getData(selectedUser) || [];
-    usersData.push(bookmark);
-
-    const sortedData = [...usersData].sort(
-      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    if (!selectedUser) return;
+    const newBookmark = createBookmark(
+      url.value,
+      title.value,
+      description.value
     );
-
+    const usersData = getData(selectedUser) || [];
+    const updatedData = addBookmark(usersData, newBookmark);
+    const sortedData = sortBookmarks(updatedData);
     setData(selectedUser, sortedData);
-    form.reset();
     renderBookmarks(sortedData);
+    form.reset();
   });
 
   function renderBookmarks(userData) {
