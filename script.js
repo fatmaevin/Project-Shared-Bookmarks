@@ -1,9 +1,3 @@
-// This is a placeholder file which shows how you can access functions defined in other files.
-// It can be loaded into index.html.
-// You can delete the contents of the file once you have understood how it works.
-// Note that when running locally, in order to open a web page which uses modules, you must serve the directory over HTTP e.g. with https://www.npmjs.com/package/http-server
-// You can't open the index.html file using a file:// URL.
-
 import { getUserIds, getData, setData, clearData } from "./storage.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,8 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
   users.addEventListener("change", (event) => {
     const selectedUser = event.target.value;
     const selectedUserData = getData(selectedUser);
-    renderBookmarks(selectedUserData);
+
+    const sortedData = [...selectedUserData].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    renderBookmarks(sortedData);
   });
+  
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const selectedUser = users.value;
@@ -46,10 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
       createdAt: new Date().toISOString(),
     };
     const usersData = getData(selectedUser) || [];
-    usersData.unshift(bookmark);
-    setData(selectedUser, usersData);
+    usersData.push(bookmark);
+
+    const sortedData = [...usersData].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    setData(selectedUser, sortedData);
     form.reset();
-    renderBookmarks(usersData);
+    renderBookmarks(sortedData);
   });
 
   function renderBookmarks(userData) {
