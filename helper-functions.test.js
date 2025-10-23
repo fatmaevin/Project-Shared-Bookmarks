@@ -1,8 +1,16 @@
-import { bookmark, sortBookmarks, addBookmark } from "./helper-functions.js";
+import {
+  createBookmark,
+  sortBookmarks,
+  addBookmark,
+} from "./helper-functions.js";
 
-describe("bookmark()", () => {
+describe("createBookmark()", () => {
   test("returns an object with correct fields", () => {
-    const result = bookmark("https://example.com", "Example", "A test site");
+    const result = createBookmark(
+      "https://example.com",
+      "Example",
+      "A test site"
+    );
 
     expect(result.url).toBe("https://example.com");
     expect(result.title).toBe("Example");
@@ -11,22 +19,25 @@ describe("bookmark()", () => {
   });
 
   test("throws an error if title or url is missing", () => {
-    expect(() => bookmark("", "Title")).toThrow(
+    expect(() => createBookmark("", "Title")).toThrow(
       "Please fill in required fields"
     );
-    expect(() => bookmark("https://x.com", "")).toThrow(
+    expect(() => createBookmark("https://x.com", "")).toThrow(
       "Please fill in required fields"
     );
   });
 });
 
 describe("sortBookmarks()", () => {
-  test("returns a reversed copy of the array", () => {
-    const bookmarks = [1, 2, 3];
+  test("sorts bookmarks by createdAt in descending order", () => {
+    const bookmarks = [
+      { createdAt: "2025-10-22T12:00:00Z" },
+      { createdAt: "2025-10-23T12:00:00Z" },
+    ];
     const result = sortBookmarks(bookmarks);
 
-    expect(result).toEqual([3, 2, 1]);
-    expect(result).not.toBe(bookmarks); 
+    expect(result[0].createdAt).toBe("2025-10-23T12:00:00Z"); 
+    expect(result[1].createdAt).toBe("2025-10-22T12:00:00Z");
   });
 });
 
@@ -39,6 +50,6 @@ describe("addBookmark()", () => {
 
     expect(result[0].title).toBe("New");
     expect(result[1].title).toBe("Old");
-    expect(result).not.toBe(existing); 
+    expect(result).not.toBe(existing);
   });
 });
